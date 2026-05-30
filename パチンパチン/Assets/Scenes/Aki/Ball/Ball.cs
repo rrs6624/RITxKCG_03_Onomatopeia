@@ -23,6 +23,8 @@ public class Ball : MonoBehaviour
     void Start()
     {
         animalType = BallType.Normal;
+
+        SetAnimalImage();
     }
 
     /// <summary>
@@ -50,8 +52,10 @@ public class Ball : MonoBehaviour
     /// <param name="addScore">加算するスコア(AddScore)</param>
     virtual public void HitAnimalPin(BallType type, int addScore)
     {
+        animalType = type;
+
         // 動物の画像をセット( set animal image)
-        SetAnimalImage(type);
+        SetAnimalImage();
 
         // ボールのスコアを加算( add ball score)
         AddBallScore(addScore);
@@ -62,12 +66,12 @@ public class Ball : MonoBehaviour
     /// </summary>
     virtual public void GoaltoCart()
     {
-
+        //BallManager.Instance.Reload();
     }
 
-    protected void SetAnimalImage(BallType type)
+    protected void SetAnimalImage()
     {
-        // ボールの種類に応じて画像を変更する処理
-        // 例: spriteRenderer.sprite = GetSpriteForBallType(type);
+        // ボールの画像をセット( set ball image)
+        spriteRenderer.sprite = BallManager.Instance.GetSpriteForBallType(animalType);
     }
 }
