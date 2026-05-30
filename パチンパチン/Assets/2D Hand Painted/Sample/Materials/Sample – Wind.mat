@@ -8,19 +8,22 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "Sample \u2013 Wind"
-  m_Shader: {fileID: 4800000, guid: bc6044f0210a495ba6a44a00bea596e9, type: 3}
-  m_ValidKeywords:
-  - _FOG_ON
+  m_Shader: {fileID: 4800000, guid: 4e90a8289da1f3943885176e4f83e35c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - BOOLEAN_7B15F7E7_ON
   - BOOLEAN_F1B2DF6D_ON
   - ETC1_EXTERNAL_ALPHA
+  - _FOG_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -74,5 +77,7 @@ Material:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _ForegroundColor: {r: 0.19607843, g: 0.21568628, b: 0.32941177, a: 1}
     - _ForegroundRange: {r: -1, g: -8, b: 0, a: 0}
+    - _White: {r: 1, g: 1, b: 1, a: 1}
     - _WindMapping: {r: -0.01, g: 0.01, b: -0.01, a: 0.01}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
