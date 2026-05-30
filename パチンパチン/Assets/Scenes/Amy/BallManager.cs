@@ -1,13 +1,21 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallManager : MonoBehaviour
 {
     public static BallManager Instance;
 
+    public GameObject Ballprefab;
     public GameObject currentBall;
 
     public List<GameObject> storage;          // This will store the instantiated ball objects that will be shown on the screen (Only 3 currently)
+
+    public Sprite chickenBall;
+    public Sprite duckBall;
+    public Sprite cowBall;
+    public Sprite horseBall;
+    public Sprite sheepBall;
 
     public int Count { get; private set; }
 
@@ -49,9 +57,11 @@ public class BallManager : MonoBehaviour
         Count = givenBall;
 
         // Instantiate current ball on screen(this means putting it on the right position as well)
+        currentBall = Instantiate(Ballprefab);
 
         // Storage Setup
         // Instantiate 3 ball objects to be in storage (For loop with instantiation and push)s
+       
     }
 
     // Please call this function after a ball hits a cart 
@@ -69,7 +79,7 @@ public class BallManager : MonoBehaviour
 
         // Set the current ball position
 
-        // Instantiate another ball to add to storage
+        // Instantiate another ball to add to storage (would also have to drop it - a little bit of physics)
 
         // Update the types of balls
         currentType = nextType;
@@ -92,6 +102,5 @@ public class BallManager : MonoBehaviour
         nextType = type;
     }
 
-
-     
+    public 
 }
