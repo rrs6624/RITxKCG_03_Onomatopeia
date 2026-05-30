@@ -69,7 +69,7 @@ public class Bounced : MonoBehaviour
 
             Rigidbody2D playerRb = other.gameObject.GetComponent<Rigidbody2D>();
 
-            if (playerRb != null)
+            if (playerRb != null && isTesting)
             {
                 Vector2 currentVelocity = playerRb.linearVelocity;
                 Vector2 oppositeVelocity = -currentVelocity * bounceForce;
