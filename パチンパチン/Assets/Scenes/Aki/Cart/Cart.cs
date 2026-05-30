@@ -64,6 +64,7 @@ public class Cart : MonoBehaviour
         }
 
         // スコア加算
+        ScoreManager.Instance.IncreaseScore(score);
 
         // カートに入った際の処理
         ball.GoaltoCart();
