@@ -4,16 +4,12 @@ using UnityEngine.InputSystem;
 
 public class Bounced : MonoBehaviour
 {
-    enum ThisBallType
-    { 
-        Horse,
-        Duck,
-        Sheep,
-        Chicken,
-        Cow
-    }
-    [SerializeField] 
-    private ThisBallType thisBallType=ThisBallType.Horse;
+    [Header("ーー ボールの種類 ーー")]
+    [SerializeField]
+    private BallType thisBallType = BallType.Horse;
+    [SerializeField]
+    private int thisBallScore = 0;
+
     [Header("ーー 吹き飛ばす力の設定 ーー")]
     [SerializeField] private float spikeForce = 15f;
     [SerializeField] private float blastRadius = 2.5f;
@@ -68,31 +64,44 @@ public class Bounced : MonoBehaviour
                 if (playerRb != null)
                 {    var ball = playerRb.gameObject.GetComponent<Ball>();
 
-                    if(ball != null)
+                    if (ball != null)
                     {
                         if (ball.BallAbilityType == BallType.Horse)
                         {
                             Vector2 pushDirection = (hit.transform.position - transform.position).normalized;
-                            playerRb.linearVelocity += pushDirection * spikeForce*2;
+                            playerRb.linearVelocity += pushDirection * spikeForce * 2;
                         }
                         else
                         {
                             Vector2 pushDirection = (hit.transform.position - transform.position).normalized;
                             playerRb.linearVelocity += pushDirection * spikeForce;
                         }
-                        //ball.HitAnimalPin() 
+                        ball.HitAnimalPin(thisBallType, thisBallScore);
                     }
-
-                    // 中心からプレイヤーへの方向（ベクトル）を計算して力を加える
-                    
-
-                
                 }
             }
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 衝突した相手が「Player」のタグを持っているか確認
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // 相手から Ball コンポーネントを取得
+            Ball ball = collision.gameObject.GetComponent<Ball>();
 
-    // Unityエディタ上で有効範囲（赤色の円）を表示
+            if (ball != null)
+            {
+                // バネが発動していないときだけ処理を実行
+                if (!isTesting)
+                {
+                    ball.HitAnimalPin(thisBallType, thisBallScore);
+                    Debug.Log("HitAnimalPin を実行");
+                }
+            }
+        }
+    }
+    // Unityエディタ上で有効範囲を表示
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
