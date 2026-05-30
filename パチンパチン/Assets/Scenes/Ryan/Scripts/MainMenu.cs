@@ -4,8 +4,8 @@ public class MainMenu : MonoBehaviour
 {
     public void Play()
     {
+        Debug.Log("Button Clicked");
         SceneManager.LoadScene("TestScene");
-        SceneManager.UnloadSceneAsync("MainMenu");
     }
 
     public void Quit()
