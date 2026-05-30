@@ -1,1 +1,1 @@
-# SD0249-RITxKCG_03_Onomatopeia
+# RITxKCG_03_Onomatopeia
