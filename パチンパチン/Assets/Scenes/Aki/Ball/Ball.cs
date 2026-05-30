@@ -43,15 +43,23 @@ public class Ball : MonoBehaviour
         return ballScore;
     }
 
+    /// <summary>
+    /// ピンに当たったときの処理 (HitAnimalPin)
+    /// </summary>
+    /// <param name="type">当たった相手の種類(HitPinType)</param>
+    /// <param name="addScore">加算するスコア(AddScore)</param>
     virtual public void HitAnimalPin(BallType type, int addScore)
     {
-        // 動物の画像をセット
+        // 動物の画像をセット( set animal image)
         SetAnimalImage(type);
 
-        // ボールのスコアを加算
+        // ボールのスコアを加算( add ball score)
         AddBallScore(addScore);
     }
 
+    /// <summary>
+    /// カートに当たったときの処理 (HitCart)
+    /// </summary>
     virtual public void GoaltoCart()
     {
 
