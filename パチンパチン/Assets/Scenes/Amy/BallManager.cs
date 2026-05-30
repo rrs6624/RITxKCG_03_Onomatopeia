@@ -9,8 +9,14 @@ public class BallManager : MonoBehaviour
     public GameObject Ballprefab;
     public GameObject currentBall;
 
+    // For smooth Ball movement
+    private List<Rigidbody2D> movingBalls;
+    private List<Vector2> targetPosition;
+
     public List<GameObject> storage;          // This will store the instantiated ball objects that will be shown on the screen (Only 3 currently)
 
+    // Holding other ball sprites
+    public Sprite normalBall;
     public Sprite chickenBall;
     public Sprite duckBall;
     public Sprite cowBall;
@@ -21,6 +27,8 @@ public class BallManager : MonoBehaviour
 
     private BallType currentType;
     private BallType nextType;
+
+    public Camera Cam;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,6 +42,8 @@ public class BallManager : MonoBehaviour
         }
 
         Instance = this;
+
+        Cam = Camera.main;
 
         // Set up ball type
         currentType = BallType.Normal;
@@ -52,6 +62,8 @@ public class BallManager : MonoBehaviour
         
     }
 
+    // If it is not smooth delta time should be called
+
     // Please call this function before game starts (Ball manager) - It sets up how many balls are used in this game or level
     // ゲーム開始前にこの関数（ボールマネージャー）を呼び出してください。この関数は、このゲームまたはレベルで使用されるボールの数を設定します。
     // Ensure that it is more than 10!!! | 必ず10以上であることを確認してください!!!
@@ -60,10 +72,17 @@ public class BallManager : MonoBehaviour
         Count = givenBall;
 
         // Instantiate current ball on screen(this means putting it on the right position as well)
-        currentBall = Instantiate(Ballprefab);
+        currentBall = Instantiate(Ballprefab, CoordinateConversion(0.84f, 0.65f), Quaternion.identity);
 
         // Storage Setup
         // Instantiate 3 ball objects to be in storage (For loop with instantiation and push)s
+        for(int i = 0; i < 3; i++)
+        {
+            float NDCx = 0.84f + (0.4f * i);
+
+            storage.Add(Instantiate(Ballprefab, CoordinateConversion(NDCx, 0.78f), Quaternion.identity));
+        }
+
        
     }
 
@@ -80,9 +99,8 @@ public class BallManager : MonoBehaviour
         currentBall = storage[0];
         storage.RemoveAt(0);
 
-        // Set the current ball position
-
         // Instantiate another ball to add to storage (would also have to drop it - a little bit of physics)
+        
 
         // Update the types of balls
         currentType = nextType;
@@ -105,10 +123,39 @@ public class BallManager : MonoBehaviour
         nextType = type;
     }
 
-    public Sprite GetSpriteForBallType()
+    public Sprite GetSpriteForBallType(BallType type = BallType.Normal)
     {
-        if()
+        switch(type)
+        {
+            case BallType.Chicken:
+                return chickenBall;
 
+
+            case BallType.Cow:
+                return cowBall;
+
+            case BallType.Duck:
+                return duckBall;
+
+            case BallType.Horse:
+                return horseBall;
+
+            case BallType.Sheep:
+                return sheepBall;
+        }
+
+        return normalBall;  // Case of default - Normal Ball
+    }
+
+    // Ensure consistent position over screen size
+    private Vector3 CoordinateConversion(float NDCx, float NDCy)
+    {
+        return Cam.ViewportToWorldPoint(new Vector3(NDCx, NDCy, 0));
+    }
+
+    // Set target balls to move
+    private void SetTarget()
+    {
 
     }
 }
