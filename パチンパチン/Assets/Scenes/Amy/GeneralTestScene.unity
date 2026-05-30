@@ -209,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BallManager
   Ballprefab: {fileID: 8110510919494269883, guid: 9f021e39023856844ad733d0a0f2f415, type: 3}
   currentBall: {fileID: 0}
-  Ballrb: {fileID: 0}
+  ballRB: {fileID: 0}
   storage: []
   normalBall: {fileID: 0}
   chickenBall: {fileID: 21300000, guid: f4212ada14db7554eb878ead8b76d008, type: 3}
@@ -217,6 +217,8 @@ MonoBehaviour:
   cowBall: {fileID: 21300000, guid: 9fcb02d9cd6bafa46af9326b2c619403, type: 3}
   horseBall: {fileID: 0}
   sheepBall: {fileID: 0}
+  Cam: {fileID: 617374178}
+  speed: 0
 --- !u!1 &339813207
 GameObject:
   m_ObjectHideFlags: 0

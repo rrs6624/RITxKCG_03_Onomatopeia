@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class BallManager : MonoBehaviour
@@ -10,6 +12,7 @@ public class BallManager : MonoBehaviour
     public GameObject currentBall;
 
     // For smooth Ball movement
+    public Rigidbody2D ballRB;
     private List<Rigidbody2D> movingBalls;
     private List<Vector2> targetPosition;
 
@@ -29,6 +32,8 @@ public class BallManager : MonoBehaviour
     private BallType nextType;
 
     public Camera Cam;
+
+    public float speed;                      // Current movement speed for ball
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -51,6 +56,8 @@ public class BallManager : MonoBehaviour
 
         // Set up storage 
         storage = new List<GameObject>();
+        movingBalls = new List<Rigidbody2D>();
+        targetPosition = new List<Vector2>();
 
         // Call Set up function (FOR NOW - This could be called elsewhere)
         Setup(10);
@@ -60,6 +67,25 @@ public class BallManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    // Unity Physics based stuff
+    private void FixedUpdate()
+    {
+        for(int i = 0; i < movingBalls.Count; i++)
+        {
+            Rigidbody2D rigidbody = movingBalls[i];
+
+            rigidbody.MovePosition(Vector2.MoveTowards(rigidbody.position, targetPosition[i], speed * Time.fixedDeltaTime));
+
+            // If close to target position remove from list
+            if (Vector2.Distance(rigidbody.position, targetPosition[i]) < 0.01f)
+            {
+                movingBalls.RemoveAt(i);
+                targetPosition.RemoveAt(i);
+                i--;
+            }
+        }
     }
 
     // If it is not smooth delta time should be called
@@ -83,12 +109,16 @@ public class BallManager : MonoBehaviour
             storage.Add(Instantiate(Ballprefab, CoordinateConversion(NDCx, 0.78f), Quaternion.identity));
         }
 
-       
+        // Current Ball speed setup
+        speed = 1.0f;
     }
 
     // Please call this function after a ball hits a cart 
     public void Reload()
     {
+        // Free Ballrb
+        ballRB = null;
+
         // Destroy this ball
         Destroy(currentBall);
 
@@ -98,13 +128,16 @@ public class BallManager : MonoBehaviour
         // Deploy the ball from storage and free storage
         currentBall = storage[0];
         storage.RemoveAt(0);
-
-        // Instantiate another ball to add to storage (would also have to drop it - a little bit of physics)
+        ballRB = currentBall.GetComponent<Rigidbody2D>();
         
-
         // Update the types of balls
         currentType = nextType;
         nextType = BallType.Normal;
+
+        // Set Target for ball to move
+        SetTarget(ballRB, CoordinateConversion(0.84f, 0.65f));
+        SetTarget(storage[0].GetComponent<Rigidbody2D>(), CoordinateConversion(0.88f, 0.78f));
+        SetTarget(storage[1].GetComponent<Rigidbody2D>(), CoordinateConversion(0.92f, 0.78f));
     }
 
 
@@ -154,8 +187,20 @@ public class BallManager : MonoBehaviour
     }
 
     // Set target balls to move
-    private void SetTarget()
+    private void SetTarget(Rigidbody2D rigidBody, Vector2 targetVector)
     {
+        int index = movingBalls.IndexOf(rigidBody);
 
+        // If it is already registered update its target
+        if(index >= 0)
+        {
+            targetPosition[index] = targetVector; 
+        }
+        else
+        {
+            // If not in movingBalls, Add it to the list
+            movingBalls.Add(rigidBody);
+            targetPosition.Add(targetVector);
+        }
     }
 }
