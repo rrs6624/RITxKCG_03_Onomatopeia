@@ -41,6 +41,9 @@ public class BallManager : MonoBehaviour
 
         // Set up storage 
         storage = new List<GameObject>();
+
+        // Call Set up function (FOR NOW - This could be called elsewhere)
+        Setup(10);
     }
 
     // Update is called once per frame
@@ -102,5 +105,10 @@ public class BallManager : MonoBehaviour
         nextType = type;
     }
 
-    public 
+    public Sprite GetSpriteForBallType()
+    {
+        if()
+
+
+    }
 }
