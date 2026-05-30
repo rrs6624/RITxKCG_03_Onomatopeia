@@ -12,6 +12,7 @@ public class ScoreManager : MonoBehaviour
         if(Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            Debug.Log("Previous memory has not been cleared.");
             return;
         }
 
@@ -45,7 +46,4 @@ public class ScoreManager : MonoBehaviour
     {
         Score -= decrement;
     }
-
-
-
 }
