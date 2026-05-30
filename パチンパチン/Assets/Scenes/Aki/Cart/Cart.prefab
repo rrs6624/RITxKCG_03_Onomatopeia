@@ -299,6 +299,7 @@ MonoBehaviour:
   boxCollider: {fileID: 4456180713340725353}
   cartType: 0
   matchedScoreMultiplier: 2
+  scorePopupPrefab: {fileID: 6449094564586744846, guid: f0556fe225167664b8500180cffbac77, type: 3}
 --- !u!1 &7449220085255906019
 GameObject:
   m_ObjectHideFlags: 0

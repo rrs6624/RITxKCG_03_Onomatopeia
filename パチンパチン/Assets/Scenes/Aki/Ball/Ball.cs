@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -5,19 +6,35 @@ public class Ball : MonoBehaviour
     /// <summary>
     /// スコア
     /// </summary>
-    protected int ballScore = 0;
+    protected int ballScore;
 
     [SerializeField]
     protected SpriteRenderer spriteRenderer;
 
     protected BallType animalType;
 
+    /// <summary>
+    /// 現在の動物の種類 (CurrentAnimalType)
+    /// </summary>
     public BallType AnimalType => animalType;
 
     [SerializeField]
     protected BallType ballAbilityType;
 
+    /// <summary>
+    /// ボールの能力の種類 (BallAbilityType)
+    /// </summary>
     public BallType BallAbilityType => ballAbilityType;
+
+    /// <summary>
+    /// スコア表示用のTextMeshProコンポーネント (TextMeshPro component for score display)
+    /// </summary>
+    [SerializeField]
+    private TextMeshPro tmp;
+
+    private float startFontSize = 8.0f;
+
+    private float addFontSize = 1.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,6 +42,13 @@ public class Ball : MonoBehaviour
         animalType = BallType.Normal;
 
         SetAnimalImage();
+
+        // スコアの初期化 (Initialize score)
+        ballScore = 0;
+
+        // スコア表示の更新( update score display)
+        tmp.text = ballScore.ToString();
+        tmp.fontSize = startFontSize;
     }
 
     /// <summary>
@@ -34,6 +58,10 @@ public class Ball : MonoBehaviour
     virtual public void AddBallScore(int score)
     {
         ballScore += score;
+
+        // スコア表示の更新( update score display)
+        tmp.text = ballScore.ToString();
+        tmp.fontSize += addFontSize;
     }
 
     /// <summary>
