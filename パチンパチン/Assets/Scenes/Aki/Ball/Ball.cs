@@ -10,10 +10,19 @@ public class Ball : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer spriteRenderer;
 
+    protected BallType animalType;
+
+    public BallType AnimalType => animalType;
+
+    [SerializeField]
+    protected BallType ballAbilityType;
+
+    public BallType BallAbilityType => ballAbilityType;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        animalType = BallType.Normal;
     }
 
     /// <summary>
@@ -34,16 +43,29 @@ public class Ball : MonoBehaviour
         return ballScore;
     }
 
-    virtual public void HitAnimalPin(/* BallType type,*/ int addScore)
+    /// <summary>
+    /// ピンに当たったときの処理 (HitAnimalPin)
+    /// </summary>
+    /// <param name="type">当たった相手の種類(HitPinType)</param>
+    /// <param name="addScore">加算するスコア(AddScore)</param>
+    virtual public void HitAnimalPin(BallType type, int addScore)
     {
-        // 動物の画像をセット
-        SetAnimalImage(/*type*/);
+        // 動物の画像をセット( set animal image)
+        SetAnimalImage(type);
 
-        // ボールのスコアを加算
+        // ボールのスコアを加算( add ball score)
         AddBallScore(addScore);
     }
 
-    protected void SetAnimalImage(/* BallType type*/)
+    /// <summary>
+    /// カートに当たったときの処理 (HitCart)
+    /// </summary>
+    virtual public void GoaltoCart()
+    {
+
+    }
+
+    protected void SetAnimalImage(BallType type)
     {
         // ボールの種類に応じて画像を変更する処理
         // 例: spriteRenderer.sprite = GetSpriteForBallType(type);
