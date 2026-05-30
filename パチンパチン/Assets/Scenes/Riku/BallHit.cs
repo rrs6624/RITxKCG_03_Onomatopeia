@@ -1,19 +1,7 @@
-using System;
 using UnityEngine;
 
-public class AddScore : MonoBehaviour
+public class BallHit : MonoBehaviour
 {
-    private enum ScoreType
-    {
-        Cow,
-        Chicken,
-        Duck,
-        Horse,
-        Sheep
-    }
-    [SerializeField]
-    private ScoreType targetAnimal = ScoreType.Cow;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
