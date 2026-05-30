@@ -1,0 +1,51 @@
+﻿using UnityEngine;
+
+public class ScoreManager : MonoBehaviour
+{
+    public static ScoreManager Instance;
+
+    public int Score { get; private set; }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        // Initialize score
+        Score = 0;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    // --------------------------------------------------------------
+    // Change score: These functions should be called inside the balls when they hit a pin
+    // 変更スコア：    これらの関数は、ボールがピンに当たったときにボール内部で呼び出される必要があります。
+    // --------------------------------------------------------------
+
+    // Increases the score count of that amount
+    // その金額分のスコアカウントを増加させる
+    public void IncreaseScore(int increment)
+    {
+        Score += increment;
+    }
+
+    // Decreases the score count of that amount
+    // その金額のスコアカウントを減らします
+    public void DecreaseScore(int decrement)
+    {
+        Score -= decrement;
+    }
+
+
+
+}
