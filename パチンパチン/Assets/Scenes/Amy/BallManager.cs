@@ -48,6 +48,8 @@ public class BallManager : MonoBehaviour
 
     public float speed;                      // Current movement speed for ball
 
+    
+    public System.Action onCountUIFunc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -199,6 +201,9 @@ public class BallManager : MonoBehaviour
         {
             Count = MAXCOUNT;
         }
+
+        // Call UI update function
+        onCountUIFunc?.Invoke();
     }
 
 
@@ -315,5 +320,12 @@ public class BallManager : MonoBehaviour
         );
 
         Destroy(ball.gameObject);
+    }
+
+    // Spawn additional ball
+    public void SpawnBonusBall(Vector2 position, BallType type = BallType.Normal)
+    {
+        Ball newBall = CreateBall(type, position);
+        activeBalls.Add(newBall);
     }
 }

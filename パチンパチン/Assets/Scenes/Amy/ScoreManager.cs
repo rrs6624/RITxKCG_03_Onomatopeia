@@ -6,10 +6,11 @@ public class ScoreManager : MonoBehaviour
 
     public int Score { get; private set; }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public System.Action onScoreChangedFunc;
+
+    private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             Debug.Log("Previous memory has not been cleared.");
@@ -17,9 +18,24 @@ public class ScoreManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
 
         // Initialize score
         Score = 0;
+    }
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
     }
 
     // Update is called once per frame
@@ -38,6 +54,9 @@ public class ScoreManager : MonoBehaviour
     public void IncreaseScore(int increment)
     {
         Score += increment;
+
+        // Call the function to update the score display
+        onScoreChangedFunc?.Invoke();
     }
 
     // Decreases the score count of that amount
@@ -45,5 +64,8 @@ public class ScoreManager : MonoBehaviour
     public void DecreaseScore(int decrement)
     {
         Score -= decrement;
+
+        // Call the function to update the score display
+        onScoreChangedFunc?.Invoke();
     }
 }
