@@ -8,4 +8,8 @@ public class scenemove : MonoBehaviour
     {
         SceneManager.LoadScene("Start Screen", LoadSceneMode.Single);
     }
+    public void SwitchSceneRestart()
+    {
+        SceneManager.LoadScene("Game Scene", LoadSceneMode.Single);
+    }
 }
