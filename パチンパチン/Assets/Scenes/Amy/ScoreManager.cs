@@ -8,10 +8,9 @@ public class ScoreManager : MonoBehaviour
 
     public System.Action onScoreChangedFunc;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             Debug.Log("Previous memory has not been cleared.");
@@ -19,9 +18,24 @@ public class ScoreManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
 
         // Initialize score
         Score = 0;
+    }
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
     }
 
     // Update is called once per frame
