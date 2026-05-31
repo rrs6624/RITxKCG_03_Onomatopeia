@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class BallObjectArgs : EventArgs
@@ -37,6 +38,8 @@ public class BallManager : MonoBehaviour
     public Sprite horseBall;
     public Sprite sheepBall;
 
+    public BallLauncher ballLauncher;
+
     public int Count { get; private set; }
 
     private const int MAXCOUNT = 10;    // Maximum amount of balls that the player can hold
@@ -54,6 +57,7 @@ public class BallManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ballLauncher = BallLauncher.Instance;
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -62,6 +66,8 @@ public class BallManager : MonoBehaviour
         }
 
         Instance = this;
+
+        
 
         Cam = Camera.main;
 
@@ -113,10 +119,13 @@ public class BallManager : MonoBehaviour
     {
         Count = givenBall;              // Set ball amount
 
+        Vector2 launchPad = ballLauncher.GetPosition();
+        launchPad = new Vector2 (launchPad.x, launchPad.y + 3f);   // Adjust the position to be slightly above the launcher
+
         // Current ball on its position
         currentBall = CreateBall(
             currentType,
-            CoordinateConversion(0.84f, 0.65f)
+            launchPad
         );
 
         Count--;

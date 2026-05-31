@@ -5,6 +5,7 @@ using UnityEngine.InputSystem.Switch;
 
 public class BallLauncher : MonoBehaviour
 {
+    public static BallLauncher Instance;
 
     //initializing all the fields
     //すべてのフィールドを初期化します
@@ -20,16 +21,27 @@ public class BallLauncher : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D boxCollider;
+    [SerializeField] private BallManager ballManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ballManager = BallManager.Instance;
         rb = GetComponent<Rigidbody2D>();
         //setting the start position so the launcher will bounce back to that later
         // 開始位置を設定することで、ランチャーが後でその位置に戻るようにします
         startPosY = boxCollider.transform.localPosition.y;
         animator.SetBool("IsIdle", true); 
         endPosY = startPosY - 0.5f; // Adjust this value to control how far down the launcher goes when charging
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            Debug.Log("Previous memory has not been cleared.");
+            return;
+        }
+
+        Instance = this;
     }
 
     // Update is called once per frame
@@ -96,6 +108,12 @@ public class BallLauncher : MonoBehaviour
             fire = true;
             animator.SetBool("IsCharging", false);
             animator.SetBool("IsFiring", true);
+            ballManager.LaunchCurrentBall();
         }
+    }
+
+    public Vector2 GetPosition()
+    {
+        return rb.position;
     }
 }
