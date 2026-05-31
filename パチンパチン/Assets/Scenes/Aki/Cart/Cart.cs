@@ -63,6 +63,12 @@ public class Cart : MonoBehaviour
             {
                 // c‚è‚Ìƒ{[ƒ‹”‚ğ‘‚â‚·
             }
+            // ‚à‚µ—r‚È‚ç
+            else if (ball.AnimalType == BallType.Sheep)
+            {
+                // —r–Ñ‚ğ¶¬‚·‚é
+                SheepMnager.Instance.SpawnSprings();
+            }
         }
         else
         {
