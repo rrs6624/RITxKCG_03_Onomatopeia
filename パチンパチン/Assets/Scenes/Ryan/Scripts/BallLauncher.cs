@@ -9,13 +9,17 @@ public class BallLauncher : MonoBehaviour
     //initializing all the fields
     //すべてのフィールドを初期化します
     private Rigidbody2D rb;
-    private float maxForce = 100f;
+    private float maxForce = 20f;
     private float currentCharge = 0f;
     private float chargeRate = 10f;
     private bool fire = false;
     private bool isCharging = false;
     private float startPosY;
+    private float endPosY;
     private bool returning = false;
+
+    [SerializeField] private Animator animator;
+    [SerializeField] private BoxCollider2D boxCollider;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,7 +27,9 @@ public class BallLauncher : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         //setting the start position so the launcher will bounce back to that later
         // 開始位置を設定することで、ランチャーが後でその位置に戻るようにします
-        startPosY = rb.position.y;
+        startPosY = boxCollider.transform.localPosition.y;
+        animator.SetBool("IsIdle", true); 
+        endPosY = startPosY - 0.5f; // Adjust this value to control how far down the launcher goes when charging
     }
 
     // Update is called once per frame
@@ -39,6 +45,8 @@ public class BallLauncher : MonoBehaviour
             if (currentCharge < maxForce)
             {
                 rb.MovePosition(new Vector2(rb.position.x, rb.position.y - currentCharge * Time.deltaTime));
+                //boxCollider.transform.localPosition = new Vector2(boxCollider.transform.localPosition.x, Mathf.Min(boxCollider.transform.localPosition.y - currentCharge * Time.deltaTime, endPosY));
+                //boxCollider.offset = new Vector2(boxCollider.offset.x, Mathf.Max(startPosY - currentCharge * Time.deltaTime, endPosY));
             }
 
             //stops once it reaches full
@@ -46,6 +54,8 @@ public class BallLauncher : MonoBehaviour
             if (currentCharge >= maxForce)
             {
                 isCharging = false;
+                animator.SetBool("IsCharging", false);
+                animator.SetBool("IsCharged", true);
             }
         }
 
@@ -53,10 +63,13 @@ public class BallLauncher : MonoBehaviour
         {
             //launches the ball with the current charge and resets the charge and starts returning to the start position
             //現在の電荷でボールを発射し、電荷をリセットして開始位置に戻り始めます
+            boxCollider.offset = new Vector2(boxCollider.offset.x, startPosY);
             fire = false;
             returning = true;
             rb.linearVelocity = new Vector2(0, currentCharge);
             currentCharge = 0;
+            
+            animator.SetBool("IsCharged", true);
         }
 
         if (returning && rb.position.y >= startPosY)
@@ -74,11 +87,15 @@ public class BallLauncher : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             isCharging = true;
+            animator.SetBool("IsCharging", true);
+            animator.SetBool("IsIdle", false);
         }
         else if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             isCharging = false;
             fire = true;
+            animator.SetBool("IsCharging", false);
+            animator.SetBool("IsFiring", true);
         }
     }
 }
