@@ -17,10 +17,11 @@ public class AnimalMove : MonoBehaviour
     private Vector2 targetPosition; // 次の目的地
     private AnimalState currentState = AnimalState.Idle;
     private Rigidbody2D rb;
-
+    private Vector3 originalScale;
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        originalScale = transform.localScale;
 
         homePosition = transform.position;
 
@@ -60,8 +61,8 @@ public class AnimalMove : MonoBehaviour
             Vector2 direction = (targetPosition - (Vector2)transform.position).normalized;
             rb.linearVelocity = direction * moveSpeed;
 
-            if (direction.x > 0) transform.localScale = new Vector3(1, 1, 1);
-            else if (direction.x < 0) transform.localScale = new Vector3(-1, 1, 1);
+            if (direction.x > 0) transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            else if (direction.x < 0) transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
         }
     }
 

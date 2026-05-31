@@ -11,7 +11,7 @@ public class textManager : MonoBehaviour
     {
         if (score_text != null)
         {
-            score_text.text = "000000";
+            score_text.text = ScoreManager.Instance.Score.ToString();
         }
         else
         {
