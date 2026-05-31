@@ -8,7 +8,12 @@ public class BallManager : MonoBehaviour
 {
     public static BallManager Instance;
 
-    public GameObject Ballprefab;
+    public GameObject normalBallPrefab;
+    public GameObject chickenBallPrefab;
+    public GameObject duckBallPrefab;
+    public GameObject cowBallPrefab;
+    public GameObject horseBallPrefab;
+    public GameObject sheepBallPrefab;
     public GameObject currentBall;
 
     // For smooth Ball movement
@@ -98,7 +103,7 @@ public class BallManager : MonoBehaviour
         Count = givenBall;
 
         // Instantiate current ball on screen(this means putting it on the right position as well)
-        currentBall = Instantiate(Ballprefab, CoordinateConversion(0.84f, 0.65f), Quaternion.identity);
+        currentBall = SpawnBallByType(CoordinateConversion(0.84f, 0.65f), Quaternion.identity, currentType);
 
         // Storage Setup
         // Instantiate 3 ball objects to be in storage (For loop with instantiation and push)s
@@ -106,7 +111,7 @@ public class BallManager : MonoBehaviour
         {
             float NDCx = 0.84f + (0.4f * i);
 
-            storage.Add(Instantiate(Ballprefab, CoordinateConversion(NDCx, 0.78f), Quaternion.identity));
+            storage.Add(SpawnBallByType(CoordinateConversion(NDCx, 0.78f), Quaternion.identity));
         }
 
         // Current Ball speed setup
@@ -140,7 +145,7 @@ public class BallManager : MonoBehaviour
         SetTarget(storage[1].GetComponent<Rigidbody2D>(), CoordinateConversion(0.88f, 0.78f));
 
         // Instantiate new ball and place it in the right position
-        storage.Add(Instantiate(Ballprefab, CoordinateConversion(0.92f, 0.78f), Quaternion.identity));
+        storage.Add(SpawnBallByType(CoordinateConversion(0.92f, 0.78f), Quaternion.identity));
     }
 
 
@@ -205,5 +210,29 @@ public class BallManager : MonoBehaviour
             movingBalls.Add(rigidBody);
             targetPosition.Add(targetVector);
         }
+    }
+
+    // Function used to spawn balls by type
+    private GameObject SpawnBallByType(Vector2 spawnPos, Quaternion rotation, BallType type = BallType.Normal)
+    {
+        switch (type)
+        {
+            case BallType.Chicken:
+                return Instantiate(chickenBallPrefab, spawnPos, rotation);
+
+            case BallType.Cow:
+                return Instantiate(cowBallPrefab, spawnPos, rotation);
+
+            case BallType.Duck:
+                return Instantiate(duckBallPrefab, spawnPos, rotation);
+
+            case BallType.Horse:
+                return Instantiate(horseBallPrefab, spawnPos, rotation);
+
+            case BallType.Sheep:
+                return Instantiate(sheepBallPrefab, spawnPos, rotation);
+        }
+
+        return Instantiate(normalBallPrefab, spawnPos, rotation);  // Case of default - Normal Ball
     }
 }
