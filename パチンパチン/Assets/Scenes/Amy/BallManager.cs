@@ -321,4 +321,11 @@ public class BallManager : MonoBehaviour
 
         Destroy(ball.gameObject);
     }
+
+    // Spawn additional ball
+    public void SpawnBonusBall(Vector2 position, BallType type = BallType.Normal)
+    {
+        Ball newBall = CreateBall(type, position);
+        activeBalls.Add(newBall);
+    }
 }
