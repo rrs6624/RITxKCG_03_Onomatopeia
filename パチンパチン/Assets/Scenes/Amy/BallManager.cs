@@ -131,19 +131,19 @@ public class BallManager : MonoBehaviour
         Count--;
 
         // Ball in storage
-        for (int i = 0; i < 3; i++)
-        {
-            float ndcX = 0.84f + (0.04f * i);
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    float ndcX = 0.84f + (0.04f * i);
 
-            storage.Add(
-                CreateBall(
-                    BallType.Normal,
-                    CoordinateConversion(ndcX, 0.78f)
-                )
-            );
+        //    storage.Add(
+        //        CreateBall(
+        //            BallType.Normal,
+        //            CoordinateConversion(ndcX, 0.78f)
+        //        )
+        //    );
 
-            Count--;
-        }
+        //    Count--;
+        //}
 
         speed = 1f;     // Set ball speed 
     }
@@ -165,32 +165,35 @@ public class BallManager : MonoBehaviour
         ballRB = null;
 
         // Deploy the ball from storage and free storage
-        currentBall = storage[0];
-        storage.RemoveAt(0);
-        ballRB = currentBall.GetComponent<Rigidbody2D>();
+        //currentBall = storage[0];
+        //storage.RemoveAt(0);
+        //ballRB = currentBall.GetComponent<Rigidbody2D>();
 
         // Update types of balls
         currentType = nextType;
         nextType = BallType.Normal;
 
         // Set Target for ball to move
-        SetTarget(ballRB,
-            CoordinateConversion(0.84f, 0.65f));
+        //SetTarget(ballRB,
+        //    CoordinateConversion(0.84f, 0.65f));
 
         // Move storage stuff
-        for (int i = 0; i < storage.Count; i++)
-        {
-            SetTarget(
-                storage[i].GetComponent<Rigidbody2D>(),
-                CoordinateConversion(0.84f + (0.04f * i), 0.78f)
-            );
-        }
+        //for (int i = 0; i < storage.Count; i++)
+        //{
+        //    SetTarget(
+        //        storage[i].GetComponent<Rigidbody2D>(),
+        //        CoordinateConversion(0.84f + (0.04f * i), 0.78f)
+        //    );
+        //}
+
+        Vector2 launchPad = ballLauncher.GetPosition();
+        launchPad = new Vector2(launchPad.x, launchPad.y + 3f);   // Adjust the position to be slightly above the launcher
 
         // Add a new ball to storage
         storage.Add(
             CreateBall(
                 nextType,
-                CoordinateConversion(0.92f, 0.78f)
+                launchPad
             )
         );
 
