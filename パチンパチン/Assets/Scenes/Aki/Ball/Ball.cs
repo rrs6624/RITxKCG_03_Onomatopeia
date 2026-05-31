@@ -36,6 +36,15 @@ public class Ball : MonoBehaviour
 
     private float addFontSize = 1.0f;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip spawnSE;
+
+    [SerializeField]
+    private AudioClip goalSE;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -49,6 +58,9 @@ public class Ball : MonoBehaviour
         // スコア表示の更新( update score display)
         tmp.text = ballScore.ToString();
         tmp.fontSize = startFontSize;
+
+        // スポーンSEの再生 (Play spawn sound effect)
+        audioSource.PlayOneShot(spawnSE);
     }
 
     /// <summary>
@@ -94,6 +106,9 @@ public class Ball : MonoBehaviour
     /// </summary>
     virtual public void GoaltoCart()
     {
+        // ゴールSEの再生 (Play goal sound effect)
+        audioSource.PlayOneShot(goalSE);
+
         BallManager.Instance.DestroyBall(this);
     }
 
