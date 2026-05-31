@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class SheepMnager : MonoBehaviour
 {
+    public static SheepMnager Instance { get; private set; }
     [Header("ーー 生成するバネのプレハブ ーー")]
     [SerializeField] private GameObject springPrefab;
 
@@ -16,6 +17,16 @@ public class SheepMnager : MonoBehaviour
 
     private int maxSpawnCount = 3; // 配置する個数
     private int maxAttempts = 50;  // 無限ループ防止
+
+    private void Awake()
+    {
+       Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     void Start()
     {
