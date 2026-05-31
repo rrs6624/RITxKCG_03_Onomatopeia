@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ScoretextManager : MonoBehaviour
 {
-
+    
 
     public GameObject score_object = null; // Textオブジェクト
 
@@ -21,6 +21,6 @@ public class ScoretextManager : MonoBehaviour
         // オブジェクトからTextコンポーネントを取得
         Text score_text = score_object.GetComponent<Text>();
         // テキストの表示を入れ替える
-        score_text.text = "000000";
+        score_text.text = ScoreManager.Instance.Score.ToString();
     }
 }
