@@ -94,7 +94,7 @@ public class Ball : MonoBehaviour
     /// </summary>
     virtual public void GoaltoCart()
     {
-        //BallManager.Instance.Reload();
+        BallManager.Instance.DestroyBall(this);
     }
 
     protected void SetAnimalImage()

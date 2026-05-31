@@ -1,22 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+
+public class BallObjectArgs : EventArgs
+{
+    public Ball BallObject { get; set; }
+}
 
 public class BallManager : MonoBehaviour
 {
     public static BallManager Instance;
 
-    public GameObject Ballprefab;
-    public GameObject currentBall;
+    public GameObject normalBallPrefab;
+    public GameObject chickenBallPrefab;
+    public GameObject duckBallPrefab;
+    public GameObject cowBallPrefab;
+    public GameObject horseBallPrefab;
+    public GameObject sheepBallPrefab;
 
     // For smooth Ball movement
     public Rigidbody2D ballRB;
     private List<Rigidbody2D> movingBalls;
     private List<Vector2> targetPosition;
 
-    public List<GameObject> storage;          // This will store the instantiated ball objects that will be shown on the screen (Only 3 currently)
+    public Ball currentBall;
+    public List<Ball> storage;          // Preview Queue
+    public List<Ball> activeBalls;      // All balls that are on the board
+
+    public event EventHandler<BallObjectArgs> OnDestroyBall;
 
     // Holding other ball sprites
     public Sprite normalBall;
@@ -28,6 +39,8 @@ public class BallManager : MonoBehaviour
 
     public int Count { get; private set; }
 
+    private const int MAXCOUNT = 10;    // Maximum amount of balls that the player can hold
+
     private BallType currentType;
     private BallType nextType;
 
@@ -35,6 +48,8 @@ public class BallManager : MonoBehaviour
 
     public float speed;                      // Current movement speed for ball
 
+    
+    public System.Action onCountUIFunc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,7 +70,8 @@ public class BallManager : MonoBehaviour
         nextType = BallType.Normal;
 
         // Set up storage 
-        storage = new List<GameObject>();
+        storage = new List<Ball>();
+        activeBalls = new List<Ball>();
         movingBalls = new List<Rigidbody2D>();
         targetPosition = new List<Vector2>();
 
@@ -95,52 +111,81 @@ public class BallManager : MonoBehaviour
     // Ensure that it is more than 10!!! | 必ず10以上であることを確認してください!!!
     public void Setup(int givenBall)
     {
-        Count = givenBall;
+        Count = givenBall;              // Set ball amount
 
-        // Instantiate current ball on screen(this means putting it on the right position as well)
-        currentBall = Instantiate(Ballprefab, CoordinateConversion(0.84f, 0.65f), Quaternion.identity);
+        // Current ball on its position
+        currentBall = CreateBall(
+            currentType,
+            CoordinateConversion(0.84f, 0.65f)
+        );
 
-        // Storage Setup
-        // Instantiate 3 ball objects to be in storage (For loop with instantiation and push)s
+        Count--;
+
+        // Ball in storage
         for (int i = 0; i < 3; i++)
         {
-            float NDCx = 0.84f + (0.4f * i);
+            float ndcX = 0.84f + (0.04f * i);
 
-            storage.Add(Instantiate(Ballprefab, CoordinateConversion(NDCx, 0.78f), Quaternion.identity));
+            storage.Add(
+                CreateBall(
+                    BallType.Normal,
+                    CoordinateConversion(ndcX, 0.78f)
+                )
+            );
+
+            Count--;
         }
 
-        // Current Ball speed setup
-        speed = 1.0f;
+        speed = 1f;     // Set ball speed 
     }
+
+
+    // Please when ball is launched (When player releases the click)
+    public void LaunchCurrentBall()
+    {
+        activeBalls.Add(currentBall);
+
+        Reload();
+    }
+
 
     // Please call this function after a ball hits a cart 
     public void Reload()
     {
-        // Free Ballrb
+        // Free ballRB
         ballRB = null;
-
-        // Destroy this ball
-        Destroy(currentBall);
-
-        // Decrease count
-        Count--;
 
         // Deploy the ball from storage and free storage
         currentBall = storage[0];
         storage.RemoveAt(0);
         ballRB = currentBall.GetComponent<Rigidbody2D>();
 
-        // Update the types of balls
+        // Update types of balls
         currentType = nextType;
         nextType = BallType.Normal;
 
         // Set Target for ball to move
-        SetTarget(ballRB, CoordinateConversion(0.84f, 0.65f));
-        SetTarget(storage[0].GetComponent<Rigidbody2D>(), CoordinateConversion(0.84f, 0.78f));
-        SetTarget(storage[1].GetComponent<Rigidbody2D>(), CoordinateConversion(0.88f, 0.78f));
+        SetTarget(ballRB,
+            CoordinateConversion(0.84f, 0.65f));
 
-        // Instantiate new ball and place it in the right position
-        storage.Add(Instantiate(Ballprefab, CoordinateConversion(0.92f, 0.78f), Quaternion.identity));
+        // Move storage stuff
+        for (int i = 0; i < storage.Count; i++)
+        {
+            SetTarget(
+                storage[i].GetComponent<Rigidbody2D>(),
+                CoordinateConversion(0.84f + (0.04f * i), 0.78f)
+            );
+        }
+
+        // Add a new ball to storage
+        storage.Add(
+            CreateBall(
+                nextType,
+                CoordinateConversion(0.92f, 0.78f)
+            )
+        );
+
+        Count--;
     }
 
 
@@ -148,7 +193,17 @@ public class BallManager : MonoBehaviour
     // 与えられたボールの総数を増やす必要がある場合は、この関数を使用してください。
     public void IncreaseBallCount(int count)
     {
-        Count += count;
+        if(Count < MAXCOUNT)
+        {
+            Count += count;
+        }
+        else
+        {
+            Count = MAXCOUNT;
+        }
+
+        // Call UI update function
+        onCountUIFunc?.Invoke();
     }
 
 
@@ -159,13 +214,13 @@ public class BallManager : MonoBehaviour
         nextType = type;
     }
 
+    // When Ball sprite needs to be retrieved from the manager
     public Sprite GetSpriteForBallType(BallType type = BallType.Normal)
     {
         switch (type)
         {
             case BallType.Chicken:
                 return chickenBall;
-
 
             case BallType.Cow:
                 return cowBall;
@@ -205,5 +260,65 @@ public class BallManager : MonoBehaviour
             movingBalls.Add(rigidBody);
             targetPosition.Add(targetVector);
         }
+    }
+
+    // Generation of Balls
+    private Ball CreateBall(BallType type, Vector2 position)
+    {
+        GameObject obj = SpawnBallByType(position, Quaternion.identity, type);
+
+        Ball ball = obj.GetComponent<Ball>();
+
+        return ball;
+    }
+
+
+    // Function used to spawn balls by type
+    private GameObject SpawnBallByType(Vector2 spawnPos, Quaternion rotation, BallType type = BallType.Normal)
+    {
+        switch (type)
+        {
+            case BallType.Chicken:
+                return Instantiate(chickenBallPrefab, spawnPos, rotation);
+
+            case BallType.Cow:
+                return Instantiate(cowBallPrefab, spawnPos, rotation);
+
+            case BallType.Duck:
+                return Instantiate(duckBallPrefab, spawnPos, rotation);
+
+            case BallType.Horse:
+                return Instantiate(horseBallPrefab, spawnPos, rotation);
+
+            case BallType.Sheep:
+                return Instantiate(sheepBallPrefab, spawnPos, rotation);
+        }
+
+        return Instantiate(normalBallPrefab, spawnPos, rotation);  // Case of default - Normal Ball
+    }
+
+    // Call when the ball is getting destroyed
+    public void DestroyBall(Ball ball)
+    {
+        if (ball == null)
+            return;
+
+        if (currentBall == ball)
+        {
+            currentBall = null;
+        }
+
+        storage.Remove(ball);
+        activeBalls.Remove(ball);
+
+        OnDestroyBall?.Invoke(
+            this,
+            new BallObjectArgs
+            {
+                BallObject = ball
+            }
+        );
+
+        Destroy(ball.gameObject);
     }
 }
