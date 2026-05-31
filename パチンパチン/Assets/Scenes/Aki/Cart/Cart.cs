@@ -20,6 +20,12 @@ public class Cart : MonoBehaviour
     [SerializeField]
     private int matchedScoreMultiplier;
 
+    /// <summary>
+    /// スコア表示用のプレハブ (Prefab for score display)
+    /// </summary>
+    [SerializeField]
+    private GameObject scorePopupPrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -64,6 +70,16 @@ public class Cart : MonoBehaviour
         }
 
         // スコア加算
+        ScoreManager.Instance.IncreaseScore(score);
+
+        // 加算したスコアをポップアップ表示する(Show the added score as a popup)
+        var popup = Instantiate(scorePopupPrefab, transform.position, Quaternion.identity);
+        var scorePopup = popup.GetComponent<ScorePopup>();
+        
+        if (scorePopup != null)
+        {
+            scorePopup.SetScore(score);
+        }
 
         // カートに入った際の処理
         ball.GoaltoCart();

@@ -4,21 +4,22 @@ using UnityEngine.InputSystem;
 
 public class Bounced : MonoBehaviour
 {
-    [Header("ーー 吹き飛ばす力の設定 ーー")]
+    [Header("ーー ボールの種類 ーー")]
     [SerializeField]
-    private float spikeForce = 15f; // 釘が発動したときの純粋な「吹き飛ばすパワー」ですわ
+    private BallType thisBallType = BallType.Horse;
+    [SerializeField]
+    private int thisBallScore = 0;
 
-    [SerializeField]
-    private float blastRadius = 2.5f; // 釘が届く「攻撃範囲（半径）」ですわ
+    [Header("ーー 吹き飛ばす力の設定 ーー")]
+    [SerializeField] private float spikeForce = 15f;
+    [SerializeField] private float blastRadius = 2.5f;
 
     [Header("ーー 見た目の設定 ーー")]
-    [SerializeField]
-    private Vector3 boostedScale = new Vector3(2f, 2f, 2f);
-    [SerializeField]
-    private float maintainTime = 0.2f;
+    [SerializeField] private Vector3 boostedScale = new Vector3(2f, 2f, 2f);
+    [SerializeField] private float maintainTime = 0.2f;
 
     private Vector3 originalScale;
-    private bool isTesting = false;
+    private bool isTesting = false; // 連打防止
 
     private void Start()
     {
@@ -27,60 +28,80 @@ public class Bounced : MonoBehaviour
 
     void Update()
     {
-        // スペースキーが押された「瞬間」だけ、起動しますわ！
+        // スペースキーが押された瞬間、かつ演出中でなければ実行
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame && !isTesting)
         {
             StartCoroutine(FlashLargeCoroutine());
-
-            // 【重要】大きくなると同時に、周囲のプレイヤーを吹き飛ばす処理を呼び出しますわ！
             DetonateSpike();
-
             Debug.Log("Spike Activated!");
         }
     }
 
+    // 起動時に一瞬だけ巨大化させる演出
     private IEnumerator FlashLargeCoroutine()
     {
         isTesting = true;
 
-        // 押された瞬間にガッと大きくして「トゲが飛び出した感」を出しますわ
         transform.localScale = boostedScale;
-
         yield return new WaitForSeconds(maintainTime);
-
-        // 自動で元の釘の大きさに戻ります
         transform.localScale = originalScale;
 
         isTesting = false;
     }
 
-    // 周囲のプレイヤーを探してブッ飛ばす、今回の主役となる処理ですわ
+    // 範囲内のプレイヤーを検知して吹き飛ばす
     private void DetonateSpike()
     {
-        // 1. 釘の中心から半径 blastRadius の円の中にいる、すべてのコライダーを感知します
+        // 中心から半径 blastRadius 内のコライダーをすべて取得
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, blastRadius);
 
         foreach (var hit in hitColliders)
         {
-            // 2. もし見つけた相手のタグが "Player" だったら……
             if (hit.CompareTag("Player"))
             {
                 Rigidbody2D playerRb = hit.GetComponent<Rigidbody2D>();
 
                 if (playerRb != null)
-                {
-                    // 3. 釘の中心からプレイヤーへの「逃げる方向（ベクトル）」を計算しますわ！
-                    Vector2 pushDirection = (hit.transform.position - transform.position).normalized;
+                {    var ball = playerRb.gameObject.GetComponent<Ball>();
 
-                    // 4. その方向に向かって、勢いよく速度を上書き（あるいは追加）します
-                    //（前の速度を完全に無視して吹き飛ばすなら =、勢いを足すなら += にしますわ）
-                    playerRb.linearVelocity = pushDirection * spikeForce;
+                    if (ball != null)
+                    {
+                        if (ball.BallAbilityType == BallType.Horse)
+                        {
+                            Vector2 pushDirection = (hit.transform.position - transform.position).normalized;
+                            playerRb.linearVelocity += pushDirection * spikeForce * 2;
+                        }
+                        else
+                        {
+                            Vector2 pushDirection = (hit.transform.position - transform.position).normalized;
+                            playerRb.linearVelocity += pushDirection * spikeForce;
+                        }
+                        ball.HitAnimalPin(thisBallType, thisBallScore);
+                    }
                 }
             }
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 衝突した相手が「Player」のタグを持っているか確認
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // 相手から Ball コンポーネントを取得
+            Ball ball = collision.gameObject.GetComponent<Ball>();
 
-    // Unityのエディタ画面に、釘の「有効範囲」を赤い円で表示させますわ！調整がとても楽になりますの
+            if (ball != null)
+            {
+                // バネが発動していないときだけ処理を実行
+                if (!isTesting)
+                {
+                    ball.HitAnimalPin(thisBallType, thisBallScore);
+                    Debug.Log("HitAnimalPin を実行");
+                }
+            }
+        }
+    }
+    // Unityエディタ上で有効範囲を表示
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
