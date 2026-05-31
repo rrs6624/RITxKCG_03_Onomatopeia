@@ -38,6 +38,7 @@ public class BallManager : MonoBehaviour
     public Sprite sheepBall;
 
     public int Count { get; private set; }
+    public int ActiveCount { get { return activeBalls.Count; } }
 
     private const int MAXCOUNT = 10;    // Maximum amount of balls that the player can hold
 
@@ -241,7 +242,7 @@ public class BallManager : MonoBehaviour
     // Ensure consistent position over screen size
     private Vector3 CoordinateConversion(float NDCx, float NDCy)
     {
-        return Cam.ViewportToWorldPoint(new Vector3(NDCx, NDCy, 0));
+        return Cam.ViewportToScreenPoint(new Vector3(NDCx, NDCy, 0));
     }
 
     // Set target balls to move
