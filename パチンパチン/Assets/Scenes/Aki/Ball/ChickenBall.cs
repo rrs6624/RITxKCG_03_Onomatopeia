@@ -11,5 +11,6 @@ public class ChickenBall : Ball
     public override void GoaltoCart()
     {
         // c‚è‚Ì‹…‚Ì”‚ğ‘‚â‚·
+        BallManager.Instance.IncreaseBallCount(1);
     }
 }
