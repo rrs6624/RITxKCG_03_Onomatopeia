@@ -119,6 +119,39 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &39946012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 39946013}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &39946013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39946012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.41425, y: -3.83625, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1453122562}
+  - {fileID: 875026626}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &86745986
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1063,7 +1096,7 @@ MonoBehaviour:
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1193,6 +1226,50 @@ Transform:
   - {fileID: 218809525}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -106.124}
+--- !u!1 &875026625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 875026626}
+  - component: {fileID: 875026627}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &875026626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875026625}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 39946013}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &875026627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875026625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bf0e564602b9e44bcfb713e19cfc83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
 --- !u!1001 &928131019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2014,6 +2091,68 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 1051518641439039297, guid: b5061269c159ef644a30ced9c67c724b, type: 3}
   m_PrefabInstance: {fileID: 5647014355125250858}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1453122561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1453122562}
+  - component: {fileID: 1453122563}
+  m_Layer: 0
+  m_Name: BallManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1453122562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453122561}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 39946013}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1453122563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453122561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9b64e6600b84f44a54ac92bd14bc88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallManager
+  normalBallPrefab: {fileID: 8110510919494269883, guid: 9f021e39023856844ad733d0a0f2f415, type: 3}
+  chickenBallPrefab: {fileID: 8151649278933995985, guid: f8c0afd1d3aca8845a3926ca1aba7694, type: 3}
+  duckBallPrefab: {fileID: 5421916280046306372, guid: e2f0842520b23fb4f83eb4c920e6c183, type: 3}
+  cowBallPrefab: {fileID: 6940841102927690278, guid: 52586e6f72532eb4eb1754b3c9387c4e, type: 3}
+  horseBallPrefab: {fileID: 4280180778662498524, guid: c9ae82de49486784fbfe2ad939bd9324, type: 3}
+  sheepBallPrefab: {fileID: 399375248465283557, guid: 9a06b076311d82a48b5608d7cfe94e3b, type: 3}
+  ballRB: {fileID: 0}
+  currentBall: {fileID: 0}
+  storage: []
+  activeBalls: []
+  normalBall: {fileID: 21300000, guid: 3df216489e8dc414fbd60d91b594eebd, type: 3}
+  chickenBall: {fileID: 21300000, guid: 8fa72c974c1234c4f97d0b260faff663, type: 3}
+  duckBall: {fileID: 21300000, guid: b9b6f154e144dc54bb6466a2d5b46632, type: 3}
+  cowBall: {fileID: 21300000, guid: 02ef4e31dae6d86488ab426453cd1f99, type: 3}
+  horseBall: {fileID: 21300000, guid: 5e86cb7fa93ad9147a16d3a662b4cdc8, type: 3}
+  sheepBall: {fileID: 21300000, guid: 84d86191fde6ea74286b63416b88bab0, type: 3}
+  Cam: {fileID: 463357633}
+  speed: 0
 --- !u!1001 &1521435807
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2754,3 +2893,4 @@ SceneRoots:
   - {fileID: 1547770688}
   - {fileID: 1521435807}
   - {fileID: 1328638458}
+  - {fileID: 39946013}
