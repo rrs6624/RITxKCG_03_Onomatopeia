@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class BallObjectArgs : EventArgs
@@ -37,8 +38,9 @@ public class BallManager : MonoBehaviour
     public Sprite horseBall;
     public Sprite sheepBall;
 
+    public BallLauncher ballLauncher;
+
     public int Count { get; private set; }
-    public int ActiveCount { get { return activeBalls.Count; } }
 
     private const int MAXCOUNT = 10;    // Maximum amount of balls that the player can hold
 
@@ -55,6 +57,7 @@ public class BallManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ballLauncher = BallLauncher.Instance;
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -63,6 +66,8 @@ public class BallManager : MonoBehaviour
         }
 
         Instance = this;
+
+        
 
         Cam = Camera.main;
 
@@ -114,28 +119,31 @@ public class BallManager : MonoBehaviour
     {
         Count = givenBall;              // Set ball amount
 
+        Vector2 launchPad = ballLauncher.GetPosition();
+        launchPad = new Vector2 (launchPad.x, launchPad.y + 3f);   // Adjust the position to be slightly above the launcher
+
         // Current ball on its position
         currentBall = CreateBall(
             currentType,
-            new Vector2(8.71f, 0.37f)
+            launchPad
         );
 
         Count--;
 
         // Ball in storage
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    float ndcX = 0.84f + (0.04f * i);
+        for (int i = 0; i < 3; i++)
+        {
+            float ndcX = 0.84f + (0.04f * i);
 
-        //    storage.Add(
-        //        CreateBall(
-        //            BallType.Normal,
-        //            CoordinateConversion(ndcX, 0.78f)
-        //        )
-        //    );
+            storage.Add(
+                CreateBall(
+                    BallType.Normal,
+                    CoordinateConversion(ndcX, 0.78f)
+                )
+            );
 
-        //    Count--;
-        //}
+            Count--;
+        }
 
         speed = 1f;     // Set ball speed 
     }
@@ -157,32 +165,32 @@ public class BallManager : MonoBehaviour
         ballRB = null;
 
         // Deploy the ball from storage and free storage
-        //currentBall = storage[0];
-        //storage.RemoveAt(0);
-        //ballRB = currentBall.GetComponent<Rigidbody2D>();
+        currentBall = storage[0];
+        storage.RemoveAt(0);
+        ballRB = currentBall.GetComponent<Rigidbody2D>();
 
         // Update types of balls
         currentType = nextType;
         nextType = BallType.Normal;
 
         // Set Target for ball to move
-        //SetTarget(ballRB,
-        //    CoordinateConversion(0.84f, 0.65f));
+        SetTarget(ballRB,
+            CoordinateConversion(0.84f, 0.65f));
 
         // Move storage stuff
-        //for (int i = 0; i < storage.Count; i++)
-        //{
-        //    SetTarget(
-        //        storage[i].GetComponent<Rigidbody2D>(),
-        //        CoordinateConversion(0.84f + (0.04f * i), 0.78f)
-        //    );
-        //}
+        for (int i = 0; i < storage.Count; i++)
+        {
+            SetTarget(
+                storage[i].GetComponent<Rigidbody2D>(),
+                CoordinateConversion(0.84f + (0.04f * i), 0.78f)
+            );
+        }
 
         // Add a new ball to storage
         storage.Add(
             CreateBall(
                 nextType,
-                new Vector2(8.71f, 0.37f)
+                CoordinateConversion(0.92f, 0.78f)
             )
         );
 
