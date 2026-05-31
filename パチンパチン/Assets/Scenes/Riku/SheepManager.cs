@@ -33,7 +33,7 @@ public class SheepMnager : MonoBehaviour
         SpawnSprings();
     }
 
-    private void SpawnSprings()
+    public void SpawnSprings()
     {
         if (springPrefab == null)
         {
