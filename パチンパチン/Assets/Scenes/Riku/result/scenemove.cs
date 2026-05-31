@@ -8,5 +8,4 @@ public class scenemove : MonoBehaviour
     {
         SceneManager.LoadScene("Start Screen", LoadSceneMode.Single);
     }
-
 }
