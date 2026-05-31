@@ -11,6 +11,7 @@ public class RamainingBallsUI : MonoBehaviour
     void Start()
     {
         ballManager = BallManager.Instance;
+        ballManager.onCountUIFunc += RemainingCountChanged;
 
         tmp = GetComponent<TextMeshProUGUI>();
 

@@ -6,6 +6,8 @@ public class ScoreManager : MonoBehaviour
 
     public int Score { get; private set; }
 
+    public System.Action onScoreChangedFunc;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,6 +40,9 @@ public class ScoreManager : MonoBehaviour
     public void IncreaseScore(int increment)
     {
         Score += increment;
+
+        // Call the function to update the score display
+        onScoreChangedFunc?.Invoke();
     }
 
     // Decreases the score count of that amount
@@ -45,5 +50,8 @@ public class ScoreManager : MonoBehaviour
     public void DecreaseScore(int decrement)
     {
         Score -= decrement;
+
+        // Call the function to update the score display
+        onScoreChangedFunc?.Invoke();
     }
 }

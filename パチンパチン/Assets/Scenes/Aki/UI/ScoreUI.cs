@@ -12,6 +12,9 @@ public class ScoreUI : MonoBehaviour
     {
         scoreManager = ScoreManager.Instance;
 
+        // Subscribe to the score change event
+        scoreManager.onScoreChangedFunc += ScoreChanged;
+
         scoreText = GetComponent<TextMeshProUGUI>();
 
         scoreText.text = scoreManager.Score.ToString();
