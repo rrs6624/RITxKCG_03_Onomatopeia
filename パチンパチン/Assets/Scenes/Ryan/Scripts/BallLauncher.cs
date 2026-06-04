@@ -8,7 +8,7 @@ public class BallLauncher : MonoBehaviour
     public static BallLauncher Instance;
 
     //initializing all the fields
-    //すべてのフィールドを初期化します
+    //すべてのフィ?ルドを初期化します
     private Rigidbody2D rb;
     private float maxForce = 20f;
     private float currentCharge = 0f;
@@ -29,7 +29,7 @@ public class BallLauncher : MonoBehaviour
         ballManager = BallManager.Instance;
         rb = GetComponent<Rigidbody2D>();
         //setting the start position so the launcher will bounce back to that later
-        // 開始位置を設定することで、ランチャーが後でその位置に戻るようにします
+        // 開始位置を設定することで、ラン?ャ?が後でその位置に戻るようにします
         startPosY = boxCollider.transform.localPosition.y;
         animator.SetBool("IsIdle", true); 
         endPosY = startPosY - 0.5f; // Adjust this value to control how far down the launcher goes when charging
@@ -50,10 +50,10 @@ public class BallLauncher : MonoBehaviour
         if (isCharging)
         {
             //as it moves down, it builds up momentum to launch the ball farther. 
-            //落下するにつれて勢いが増し、ボールをより遠くまで飛ばします。
+            //落下するにつれて勢いが増し、??ルをより遠くまで飛ばします。
             currentCharge = Mathf.Min(currentCharge + chargeRate * Time.deltaTime, maxForce);
             //moves the platform down while it's not fully charged
-            //プラットフォームが完全に充電されていない状態で下に移動させる
+            //プラットフォ??が完全に?電されていない状態で下に移動させる
             if (currentCharge < maxForce)
             {
                 rb.MovePosition(new Vector2(rb.position.x, rb.position.y - currentCharge * Time.deltaTime));
@@ -62,7 +62,7 @@ public class BallLauncher : MonoBehaviour
             }
 
             //stops once it reaches full
-            //満杯になると停止します
+            //満杯になると停?します
             if (currentCharge >= maxForce)
             {
                 isCharging = false;
@@ -74,7 +74,7 @@ public class BallLauncher : MonoBehaviour
         else if (fire)
         {
             //launches the ball with the current charge and resets the charge and starts returning to the start position
-            //現在の電荷でボールを発射し、電荷をリセットして開始位置に戻り始めます
+            //現在の電荷で??ルを発射し、電荷をリセットして開始位置に戻り始めます
             boxCollider.offset = new Vector2(boxCollider.offset.x, startPosY);
             fire = false;
             returning = true;
@@ -108,7 +108,7 @@ public class BallLauncher : MonoBehaviour
             fire = true;
             animator.SetBool("IsCharging", false);
             animator.SetBool("IsFiring", true);
-            ballManager.LaunchCurrentBall();
+            BallManager.Instance.LaunchCurrentBall();
         }
     }
 

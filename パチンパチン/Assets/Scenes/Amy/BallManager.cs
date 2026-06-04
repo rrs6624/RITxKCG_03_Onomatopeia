@@ -154,7 +154,7 @@ public class BallManager : MonoBehaviour
     {
         activeBalls.Add(currentBall);
 
-        Reload();
+        // Reload();
     }
 
 
@@ -167,7 +167,6 @@ public class BallManager : MonoBehaviour
         // Deploy the ball from storage and free storage
         //currentBall = storage[0];
         //storage.RemoveAt(0);
-        //ballRB = currentBall.GetComponent<Rigidbody2D>();
 
         // Update types of balls
         currentType = nextType;
@@ -186,18 +185,20 @@ public class BallManager : MonoBehaviour
         //    );
         //}
 
-        Vector2 launchPad = ballLauncher.GetPosition();
-        launchPad = new Vector2(launchPad.x, launchPad.y + 3f);   // Adjust the position to be slightly above the launcher
+        //Vector2 launchPad = ballLauncher.GetPosition();
+        //launchPad = new Vector2(launchPad.x, launchPad.y + 3f);   // Adjust the position to be slightly above the launcher
+
+        currentBall = CreateBall(
+                currentType,
+                new Vector2(8.31f, -0.91f)
+            );
 
         // Add a new ball to storage
-        storage.Add(
-            CreateBall(
-                nextType,
-                launchPad
-            )
-        );
+        storage.Add(currentBall);
 
         Count--;
+
+        ballRB = currentBall.GetComponent<Rigidbody2D>();
     }
 
 
@@ -332,6 +333,10 @@ public class BallManager : MonoBehaviour
         );
 
         Destroy(ball.gameObject);
+
+        
+        Debug.Log("Destroyed Ball");
+        Reload();
     }
 
     // Spawn additional ball
@@ -339,5 +344,10 @@ public class BallManager : MonoBehaviour
     {
         Ball newBall = CreateBall(type, position);
         activeBalls.Add(newBall);
+    }
+
+    public void Collieded()
+    {
+        DestroyBall(currentBall);
     }
 }

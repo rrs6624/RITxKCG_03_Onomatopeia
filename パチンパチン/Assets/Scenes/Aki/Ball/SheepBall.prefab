@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5253945835499444343}
   m_Layer: 0
   m_Name: SheepBall
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -117,6 +117,7 @@ MonoBehaviour:
   ballAbilityType: 5
   tmp: {fileID: 7050822061228753528}
   audioSource: {fileID: 5253945835499444343}
+  ballManager: {fileID: 0}
   spawnSE: {fileID: 8300000, guid: 719b8966887e7864f9b991a464aca20f, type: 3}
   goalSE: {fileID: 8300000, guid: 3905606ea53405042998fa20622c973a, type: 3}
 --- !u!82 &5253945835499444343

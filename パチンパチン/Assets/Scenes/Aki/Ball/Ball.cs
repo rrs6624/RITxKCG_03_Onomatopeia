@@ -22,12 +22,12 @@ public class Ball : MonoBehaviour
     protected BallType ballAbilityType;
 
     /// <summary>
-    /// ボールの能力の種類 (BallAbilityType)
+    /// ??ルの?力の種類 (BallAbilityType)
     /// </summary>
     public BallType BallAbilityType => ballAbilityType;
 
     /// <summary>
-    /// スコア表示用のTextMeshProコンポーネント (TextMeshPro component for score display)
+    /// スコア?示用のTextMeshProコン??ネント (TextMeshPro component for score display)
     /// </summary>
     [SerializeField]
     private TextMeshPro tmp;
@@ -40,6 +40,9 @@ public class Ball : MonoBehaviour
     private AudioSource audioSource;
 
     [SerializeField]
+    private BallManager ballManager;
+
+    [SerializeField]
     private AudioClip spawnSE;
 
     [SerializeField]
@@ -49,17 +52,18 @@ public class Ball : MonoBehaviour
     void Start()
     {
         animalType = BallType.Normal;
+        ballManager = BallManager.Instance;
 
         SetAnimalImage();
 
         // スコアの初期化 (Initialize score)
         ballScore = 0;
 
-        // スコア表示の更新( update score display)
+        // スコア?示の更新( update score display)
         tmp.text = ballScore.ToString();
         tmp.fontSize = startFontSize;
 
-        // スポーンSEの再生 (Play spawn sound effect)
+        // ス??ンSEの再生 (Play spawn sound effect)
         audioSource.PlayOneShot(spawnSE);
     }
 
@@ -71,13 +75,13 @@ public class Ball : MonoBehaviour
     {
         ballScore += score;
 
-        // スコア表示の更新( update score display)
+        // スコア?示の更新( update score display)
         tmp.text = ballScore.ToString();
         tmp.fontSize += addFontSize;
     }
 
     /// <summary>
-    /// ボールのスコアの取得 (GetBallScore)
+    /// ??ルのスコアの取得 (GetBallScore)
     /// </summary>
     /// <returns>現在のスコア(BallScore)</returns>
     virtual public int GetBallScore()
@@ -93,20 +97,21 @@ public class Ball : MonoBehaviour
     virtual public void HitAnimalPin(BallType type, int addScore)
     {
         animalType = type;
+        BallManager.Instance.UpdateBallType(type);
 
         // 動物の画像をセット( set animal image)
         SetAnimalImage();
 
-        // ボールのスコアを加算( add ball score)
+        // ??ルのスコアを加算( add ball score)
         AddBallScore(addScore);
     }
 
     /// <summary>
-    /// カートに当たったときの処理 (HitCart)
+    /// カ?トに当たったときの処理 (HitCart)
     /// </summary>
     virtual public void GoaltoCart()
     {
-        // ゴールSEの再生 (Play goal sound effect)
+        // ゴ?ルSEの再生 (Play goal sound effect)
         audioSource.PlayOneShot(goalSE);
 
         BallManager.Instance.DestroyBall(this);
@@ -114,7 +119,16 @@ public class Ball : MonoBehaviour
 
     protected void SetAnimalImage()
     {
-        // ボールの画像をセット( set ball image)
+        // ??ルの画像をセット( set ball image)
         spriteRenderer.sprite = BallManager.Instance.GetSpriteForBallType(animalType);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 3)
+        {
+            Debug.Log("Collision");
+            BallManager.Instance.Collieded();
+        }
     }
 }
